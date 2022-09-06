@@ -19,7 +19,6 @@ public class UserRequest {
     @NotNull
     @Size(min = 2)
     private String surname;
-    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dob;
     @NotNull
