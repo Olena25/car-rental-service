@@ -20,8 +20,8 @@ public class UserController {
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerUser(@RequestBody @Valid UserRequest userRequest) {
-        userService.registerUser(userRequest);
+    public UserResponse registerUser(@RequestBody @Valid UserRequest userRequest) {
+        return userService.registerUser(userRequest);
     }
 
     @GetMapping("/users/{user_id}")

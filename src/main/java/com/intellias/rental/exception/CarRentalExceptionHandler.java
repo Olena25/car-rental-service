@@ -32,4 +32,27 @@ public class CarRentalExceptionHandler {
         return new Error(e.getMessage());
     }
 
+    @ExceptionHandler(NotEnoughMoneyForRentException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public Error handleNotEnoughMoneyForRentException(NotEnoughMoneyForRentException e) {
+        String message = "Not enough money to rent. Total rent price is - " + e.getTotalRentPrice() + "$";
+
+        return new Error(message);
+    }
+
+    @ExceptionHandler(RentIsNotFoundForUserException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public Error handleRentIsNotFoundForUserException(RentIsNotFoundForUserException e) {
+        String message = e.getMessage() +" with passport number " + e.getPassportNumber();
+        return new Error(message);
+    }
+    @ExceptionHandler(RentDurationLimitExceedException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public Error handleRentDurationLimitExceedException(RentDurationLimitExceedException e){
+        return new Error(e.getMessage());
+    }
+
 }

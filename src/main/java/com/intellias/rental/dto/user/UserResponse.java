@@ -14,7 +14,9 @@ public class UserResponse {
     private String firstName;
     private String surname;
     private LocalDate dob;
+    private Integer age;
     private String passportNumber;
+    private String email;
+    private boolean isEmailConfirmed;
     private int walletAmount;
-
 }
