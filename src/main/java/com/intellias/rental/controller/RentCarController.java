@@ -1,5 +1,7 @@
 package com.intellias.rental.controller;
 
+import com.intellias.rental.dto.rent.ConfirmedRentRequest;
+import com.intellias.rental.dto.rent.ConfirmedRentResponse;
 import com.intellias.rental.dto.rent.RentCarRequest;
 import com.intellias.rental.dto.rent.RentCarResponse;
 import com.intellias.rental.service.RentCarService;
@@ -15,10 +17,14 @@ public class RentCarController {
 
     private RentCarService rentCarService;
 
-    @PostMapping("/users/{userId}/cars/{carId}/rent")
+    @PostMapping("/users/{userId}/cars/{carId}/book")
     public RentCarResponse rentCar(@PathVariable int userId,
                                    @PathVariable int carId,
-                                   @RequestBody RentCarRequest rentCarRequest){
-        return rentCarService.rentCar(userId,carId,rentCarRequest);
+                                   @RequestBody RentCarRequest rentCarRequest) {
+        return rentCarService.bookCar(userId,carId,rentCarRequest);
+    }
+    @PostMapping("/rent/confirm")
+    public ConfirmedRentResponse confirmRent(@RequestBody ConfirmedRentRequest confirmedRentRequest){
+       return rentCarService.confirmRent(confirmedRentRequest);
     }
 }

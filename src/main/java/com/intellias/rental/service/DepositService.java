@@ -50,15 +50,7 @@ public class DepositService {
         Wallet wallet = user.getWallet();
         wallet.setAmount(depositRequest.getAmount());
 
-        Transaction transaction = Transaction.builder()
-                .amount(depositRequest.getAmount())
-                .wallet(wallet)
-                .type(TransactionType.DEPOSIT)
-                .build();
-
-        log.info("Saving transaction to wallet with id {}", wallet.getId());
-
-        transactionRepository.save(transaction);
+        createNewTransaction(depositRequest.getAmount(), wallet, TransactionType.DEPOSIT);
 
         walletRepository.save(wallet);
 
@@ -66,5 +58,16 @@ public class DepositService {
         depositCodeRepository.save(depositCode);
     }
 
+    public void createNewTransaction(int amount, Wallet wallet, TransactionType type) {
+        Transaction transaction = Transaction.builder()
+                .amount(amount)
+                .wallet(wallet)
+                .type(type)
+                .build();
+
+        log.info("Saving transaction to wallet with id {}", wallet.getId());
+
+        transactionRepository.save(transaction);
+    }
 
 }
