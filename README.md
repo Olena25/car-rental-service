@@ -10,3 +10,6 @@ There is such API as:
 
 The main idea is to create Rest API service which will provide
 with full ability to create and manage rents.
+
+
+Technologies: Java 8, Spring Boot, Spring Data, Spring Mail, MySQL 
