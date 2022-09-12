@@ -18,6 +18,9 @@ public class User {
     private Integer age;
     @Column(name = "passport_number")
     private String passportNumber;
+    private String email;
+    @Column(name = "email_confirmed")
+    private boolean isEmailConfirmed;
     @OneToOne(mappedBy = "user")
     private Wallet wallet;
 

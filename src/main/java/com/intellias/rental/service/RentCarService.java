@@ -28,6 +28,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @Service
 @RequiredArgsConstructor
 public class RentCarService {
+
     @Value("${car-rental.limit-rent-days}")
     private Integer daysLimit;
     @Value("${car-rental.age-for-tax}")
@@ -43,7 +44,8 @@ public class RentCarService {
     private final DepositService depositService;
 
     public RentCarResponse bookCar(int userId, int carId, RentCarRequest rentCarRequest) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findUserByIdAndIsEmailConfirmed(userId, true)
+                .orElseThrow(UserNotFoundException::new);
         Car car = carRepository.findById(carId).orElseThrow(CarNotFoundException::new);
 
         long rentingDays = DAYS.between(rentCarRequest.getStartDate(), rentCarRequest.getEndDate());
@@ -113,7 +115,7 @@ public class RentCarService {
         rentedCarRepository.save(bookedCar);
 
         ConfirmedRentResponse confirmedRentResponse =
-                new ConfirmedRentResponse(bookedCar.getStartDate(),bookedCar.getEndDate(),bookedCar.getRentStatus(),rentCarPrice);
+                new ConfirmedRentResponse(bookedCar.getStartDate(), bookedCar.getEndDate(), bookedCar.getRentStatus(), rentCarPrice);
         return confirmedRentResponse;
     }
 }

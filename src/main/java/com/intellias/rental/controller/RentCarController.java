@@ -20,7 +20,7 @@ public class RentCarController {
     @PostMapping("/users/{userId}/cars/{carId}/book")
     public RentCarResponse rentCar(@PathVariable int userId,
                                    @PathVariable int carId,
-                                   @RequestBody RentCarRequest rentCarRequest){
+                                   @RequestBody RentCarRequest rentCarRequest) {
         return rentCarService.bookCar(userId,carId,rentCarRequest);
     }
     @PostMapping("/rent/confirm")

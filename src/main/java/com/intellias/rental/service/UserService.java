@@ -5,6 +5,7 @@ import com.intellias.rental.db.WalletRepository;
 import com.intellias.rental.dto.AgeResponse;
 import com.intellias.rental.dto.user.UserRequest;
 import com.intellias.rental.dto.user.UserResponse;
+import com.intellias.rental.exception.EmailIsAlreadyExistException;
 import com.intellias.rental.exception.UserAgeNotFoundException;
 import com.intellias.rental.exception.UserAlreadyRegisteredException;
 import com.intellias.rental.exception.UserNotFoundException;
@@ -26,6 +27,7 @@ public class UserService {
     private WalletRepository walletRepository;
     private UserMapper userMapper;
     private AgeApiService ageApiService;
+    private MailApiService mailApiService;
 
     public UserResponse findUserById(int userId) {
         return userRepository.findById(userId)
@@ -39,6 +41,11 @@ public class UserService {
                     throw new UserAlreadyRegisteredException();
                 });
 
+        if (userRepository.countByEmail(userRequest.getEmail()) > 0) {
+            log.info("Email {} is already registered", userRequest.getEmail());
+            throw new EmailIsAlreadyExistException();
+        }
+
         User user = userMapper.mapToUser(userRequest);
 
         if (user.getDob() == null) {
@@ -49,13 +56,15 @@ public class UserService {
                 throw new UserAgeNotFoundException();
             }
 
-           user.setAge(ageResponse.getAge());
-        }else {
+            user.setAge(ageResponse.getAge());
+        } else {
             int age = Period.between(user.getDob(), LocalDate.now()).getYears();
             user.setAge(age);
         }
 
         userRepository.save(user);
+        mailApiService.sendEmailToConfirm(user.getId());
+
         userRepository.flush();
 
         walletRepository.save(createWallet(user));
